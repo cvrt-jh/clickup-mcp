@@ -2,17 +2,30 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { get } from "../client.js";
 import { teamId, spaceId, folderId, listId, jsonResult } from "../types.js";
+import { slimSpace, slimFolder, slimList, slimArray } from "../slim.js";
 
 export function register(server: McpServer) {
   server.registerTool("clickup_whoami", {
     description: "Get current user info and list of workspaces with members",
     inputSchema: {},
   }, async () => {
-    const [user, teams] = await Promise.all([
-      get("/user"),
-      get("/team"),
+    const [userData, teamsData] = await Promise.all([
+      get<{ user: Record<string, unknown> }>("/user"),
+      get<{ teams: Array<{ id: string; name: string; members: unknown[] }> }>("/team"),
     ]);
-    return jsonResult({ user, teams });
+    const user = userData.user;
+    const workspaces = teamsData.teams.map((t) => ({
+      id: t.id,
+      name: t.name,
+      member_count: t.members.length,
+    }));
+    return jsonResult({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      timezone: user.timezone,
+      workspaces,
+    });
   });
 
   server.registerTool("clickup_get_spaces", {
@@ -25,7 +38,7 @@ export function register(server: McpServer) {
     const data = await get(`/team/${team_id}/space`, {
       archived: archived ? "true" : undefined,
     });
-    return jsonResult(data);
+    return jsonResult(slimArray(data, "spaces", slimSpace));
   });
 
   server.registerTool("clickup_get_folders", {
@@ -38,7 +51,7 @@ export function register(server: McpServer) {
     const data = await get(`/space/${space_id}/folder`, {
       archived: archived ? "true" : undefined,
     });
-    return jsonResult(data);
+    return jsonResult(slimArray(data, "folders", slimFolder));
   });
 
   server.registerTool("clickup_get_lists", {
@@ -58,7 +71,7 @@ export function register(server: McpServer) {
     const data = await get(path, {
       archived: archived ? "true" : undefined,
     });
-    return jsonResult(data);
+    return jsonResult(slimArray(data, "lists", slimList));
   });
 
   server.registerTool("clickup_get_list", {
@@ -68,6 +81,6 @@ export function register(server: McpServer) {
     },
   }, async ({ list_id }) => {
     const data = await get(`/list/${list_id}`);
-    return jsonResult(data);
+    return jsonResult(slimList(data));
   });
 }

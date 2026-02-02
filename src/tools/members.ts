@@ -1,7 +1,7 @@
-import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { get } from "../client.js";
 import { listId, jsonResult } from "../types.js";
+import { slimMember, slimListMember } from "../slim.js";
 
 export function register(server: McpServer) {
   server.registerTool("clickup_get_workspace_members", {
@@ -10,7 +10,7 @@ export function register(server: McpServer) {
   }, async () => {
     const data = await get<{ teams: Array<{ id: string; name: string; members: unknown[] }> }>("/team");
     const members = data.teams.flatMap((team) =>
-      team.members.map((m) => ({ workspace_id: team.id, workspace_name: team.name, ...m as Record<string, unknown> }))
+      team.members.map((m) => slimMember({ workspace_id: team.id, workspace_name: team.name, ...m as Record<string, unknown> }))
     );
     return jsonResult({ members });
   });
@@ -21,7 +21,7 @@ export function register(server: McpServer) {
       list_id: listId,
     },
   }, async ({ list_id }) => {
-    const data = await get(`/list/${list_id}/member`);
-    return jsonResult(data);
+    const data = await get<{ members: unknown[] }>(`/list/${list_id}/member`);
+    return jsonResult({ members: data.members.map(slimListMember) });
   });
 }

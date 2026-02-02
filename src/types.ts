@@ -36,9 +36,9 @@ export const customFieldValue = z.union([
   z.object({}).passthrough(),
 ]).describe("Custom field value (type depends on field type)");
 
-// Helper to format tool results
+// Helper to format tool results (compact JSON to save tokens)
 export function jsonResult(data: unknown): { content: Array<{ type: "text"; text: string }> } {
   return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
+    content: [{ type: "text" as const, text: JSON.stringify(data) }],
   };
 }

@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { get, post, put } from "../client.js";
 import { taskId, commentId, jsonResult } from "../types.js";
+import { slimCommentResponse } from "../slim.js";
 
 export function register(server: McpServer) {
   server.registerTool("clickup_create_comment", {
@@ -14,7 +15,7 @@ export function register(server: McpServer) {
     },
   }, async ({ task_id, ...body }) => {
     const data = await post(`/task/${task_id}/comment`, body);
-    return jsonResult(data);
+    return jsonResult(slimCommentResponse(data));
   });
 
   server.registerTool("clickup_get_comments", {
@@ -53,7 +54,7 @@ export function register(server: McpServer) {
     },
   }, async ({ comment_id, comment_text }) => {
     const data = await post(`/comment/${comment_id}/reply`, { comment_text });
-    return jsonResult(data);
+    return jsonResult(slimCommentResponse(data));
   });
 
   server.registerTool("clickup_get_replies", {

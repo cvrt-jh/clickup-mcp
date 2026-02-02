@@ -6,6 +6,7 @@ import {
   priority, assignees, tags, dueDate, startDate, timeEstimate,
   customFieldValue, jsonResult,
 } from "../types.js";
+import { slimTask, slimArray } from "../slim.js";
 
 export function register(server: McpServer) {
   server.registerTool("clickup_get_task", {
@@ -20,7 +21,7 @@ export function register(server: McpServer) {
     if (include_subtasks) query.include_subtasks = "true";
     if (include_markdown_description) query.include_markdown_description = "true";
     const data = await get(`/task/${task_id}`, query);
-    return jsonResult(data);
+    return jsonResult(slimTask(data));
   });
 
   server.registerTool("clickup_create_task", {
@@ -48,7 +49,7 @@ export function register(server: McpServer) {
     },
   }, async ({ list_id, ...body }) => {
     const data = await post(`/list/${list_id}/task`, body);
-    return jsonResult(data);
+    return jsonResult(slimTask(data));
   });
 
   server.registerTool("clickup_update_task", {
@@ -74,7 +75,7 @@ export function register(server: McpServer) {
     },
   }, async ({ task_id, ...body }) => {
     const data = await put(`/task/${task_id}`, body);
-    return jsonResult(data);
+    return jsonResult(slimTask(data));
   });
 
   server.registerTool("clickup_get_tasks", {
@@ -107,7 +108,7 @@ export function register(server: McpServer) {
     if (statuses) query["statuses[]"] = statuses;
     if (filterAssignees) query["assignees[]"] = filterAssignees;
     const data = await get(`/list/${list_id}/task`, query);
-    return jsonResult(data);
+    return jsonResult(slimArray(data, "tasks", slimTask));
   });
 
   server.registerTool("clickup_search_tasks", {
@@ -147,7 +148,7 @@ export function register(server: McpServer) {
     if (folder_ids) query["folder_ids[]"] = folder_ids;
     if (project_ids) query["project_ids[]"] = project_ids;
     const data = await get(`/team/${team_id}/task`, query);
-    return jsonResult(data);
+    return jsonResult(slimArray(data, "tasks", slimTask));
   });
 
   server.registerTool("clickup_set_custom_field", {

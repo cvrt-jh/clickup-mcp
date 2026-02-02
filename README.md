@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
 
-Lightweight ClickUp MCP server focused on task management. 35 tools with **token-optimized responses** — API responses automatically slimmed from thousands of characters to essentials.
+Lightweight ClickUp MCP server focused on task management. 36 tools with **token-optimized responses** — API responses automatically slimmed from thousands of characters to essentials.
 
 ## Why This Server?
 
@@ -125,14 +125,15 @@ All responses are automatically trimmed to save tokens. The ClickUp API returns 
 | Pretty-print JSON | all responses | Compact single-line output |
 | Empty arrays | tasks | `checklists`, `dependencies`, `custom_fields` omitted when empty |
 
-## Tools (35)
+## Tools (36)
 
-### Navigation (5)
+### Navigation (6)
 - `clickup_whoami` - Current user + workspaces
 - `clickup_get_spaces` - Spaces in workspace
 - `clickup_get_folders` - Folders in space
 - `clickup_get_lists` - Lists in folder or space
 - `clickup_get_list` - Single list details
+- `clickup_delete_list` - Delete a list (permanent)
 
 ### Task CRUD (5)
 - `clickup_get_task` - Get task by ID
@@ -189,7 +190,7 @@ src/
   types.ts          # Shared Zod schemas + jsonResult helper
   slim.ts           # Response slimming transformers
   tools/
-    navigation.ts   # 5 tools
+    navigation.ts   # 6 tools
     tasks.ts        # 7 tools (CRUD + custom fields + delete)
     tags.ts         # 6 tools
     checklists.ts   # 6 tools

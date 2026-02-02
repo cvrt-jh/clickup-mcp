@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { get } from "../client.js";
+import { get, del } from "../client.js";
 import { teamId, spaceId, folderId, listId, jsonResult } from "../types.js";
 import { slimSpace, slimFolder, slimList, slimArray } from "../slim.js";
 
@@ -82,5 +82,15 @@ export function register(server: McpServer) {
   }, async ({ list_id }) => {
     const data = await get(`/list/${list_id}`);
     return jsonResult(slimList(data));
+  });
+
+  server.registerTool("clickup_delete_list", {
+    description: "Delete a list. This is permanent and cannot be undone.",
+    inputSchema: {
+      list_id: listId,
+    },
+  }, async ({ list_id }) => {
+    await del(`/list/${list_id}`);
+    return jsonResult({ deleted: true, list_id });
   });
 }

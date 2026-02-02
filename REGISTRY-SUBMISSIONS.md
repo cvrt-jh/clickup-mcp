@@ -24,7 +24,7 @@ make publisher
   --name "io.github.cvrt-jh/clickup-mcp" \
   --description "Lightweight ClickUp MCP server - 35 tools with token-optimized responses (95%+ reduction)" \
   --repository "https://github.com/cvrt-jh/clickup-mcp" \
-  --npm "@cvrt-jh/clickup-mcp"
+  --npm "@cavort-it-systems/clickup-mcp"
 ```
 
 ### Alternative: GitHub Actions
@@ -77,7 +77,7 @@ jobs:
 **Details:**
 - Name: clickup-mcp
 - URL: https://github.com/cvrt-jh/clickup-mcp
-- npm: @cvrt-jh/clickup-mcp
+- npm: @cavort-it-systems/clickup-mcp
 - Description: Token-optimized ClickUp MCP server. 35 tools covering tasks, comments, checklists, tags, dependencies. Reduces API response size by 95%+.
 
 ---
@@ -98,5 +98,5 @@ jobs:
 Update Claude config examples to use simpler command:
 
 ```bash
-claude mcp add clickup -e CLICKUP_API_TOKEN=xxx -- npx @cvrt-jh/clickup-mcp
+claude mcp add clickup -e CLICKUP_API_TOKEN=xxx -- npx @cavort-it-systems/clickup-mcp
 ```

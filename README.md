@@ -1,6 +1,6 @@
 # clickup-mcp
 
-[![npm version](https://img.shields.io/npm/v/@cvrt-jh/clickup-mcp.svg)](https://www.npmjs.com/package/@cvrt-jh/clickup-mcp)
+[![npm version](https://img.shields.io/npm/v/@cavort-it-systems/clickup-mcp.svg)](https://www.npmjs.com/package/@cavort-it-systems/clickup-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
 
@@ -20,13 +20,13 @@ Less tokens = faster responses, lower costs, more context for your AI.
 ## Installation
 
 ```bash
-npm install -g @cvrt-jh/clickup-mcp
+npm install -g @cavort-it-systems/clickup-mcp
 ```
 
 Or run directly:
 
 ```bash
-npx @cvrt-jh/clickup-mcp
+npx @cavort-it-systems/clickup-mcp
 ```
 
 ## Configuration
@@ -34,7 +34,7 @@ npx @cvrt-jh/clickup-mcp
 ### Claude Code CLI
 
 ```bash
-claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- npx @cvrt-jh/clickup-mcp
+claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- npx @cavort-it-systems/clickup-mcp
 ```
 
 ### Claude Desktop / Manual
@@ -46,7 +46,7 @@ Add to your MCP config (`~/.claude.json` or Claude Desktop settings):
   "mcpServers": {
     "clickup": {
       "command": "npx",
-      "args": ["@cvrt-jh/clickup-mcp"],
+      "args": ["@cavort-it-systems/clickup-mcp"],
       "env": {
         "CLICKUP_API_TOKEN": "your-token"
       }

@@ -1,5 +1,5 @@
 {
-  "name": "@cvrt-jh/clickup-mcp",
+  "name": "@cavort-it-systems/clickup-mcp",
   "version": "1.0.0",
   "description": "Lightweight ClickUp MCP server for task management - token-optimized responses",
   "type": "module",

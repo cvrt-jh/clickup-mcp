@@ -2,6 +2,9 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { post, del } from "../client.js";
 import { taskId, jsonResult } from "../types.js";
+import { slimTask } from "../slim.js";
+
+type Obj = Record<string, unknown>;
 
 export function register(server: McpServer) {
   server.registerTool("clickup_add_dependency", {
@@ -47,8 +50,8 @@ export function register(server: McpServer) {
       links_to: z.string().describe("Second task ID to link to"),
     },
   }, async ({ task_id, links_to }) => {
-    const data = await post(`/task/${task_id}/link/${links_to}`);
-    return jsonResult(data);
+    const data = await post(`/task/${task_id}/link/${links_to}`) as Obj;
+    return jsonResult(data.task ? { task: slimTask(data.task) } : { linked: true, task_id, links_to });
   });
 
   server.registerTool("clickup_delete_task_link", {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { get, del } from "../client.js";
+import { get, post, del } from "../client.js";
 import { teamId, spaceId, folderId, listId, jsonResult } from "../types.js";
 import { slimSpace, slimFolder, slimList, slimArray } from "../slim.js";
 
@@ -81,6 +81,33 @@ export function register(server: McpServer) {
     },
   }, async ({ list_id }) => {
     const data = await get(`/list/${list_id}`);
+    return jsonResult(slimList(data));
+  });
+
+  server.registerTool("clickup_create_list", {
+    description: "Create a new list in a folder or as a folderless list in a space",
+    inputSchema: {
+      folder_id: folderId.optional().describe("Folder ID (for list inside folder)"),
+      space_id: spaceId.optional().describe("Space ID (for folderless list)"),
+      name: z.string().describe("List name"),
+      content: z.string().optional().describe("List description"),
+      due_date: z.number().optional().describe("Due date as Unix timestamp in milliseconds"),
+      priority: z.number().optional().describe("Priority (1=urgent, 2=high, 3=normal, 4=low)"),
+      status: z.string().optional().describe("Status name to use as default"),
+    },
+  }, async ({ folder_id, space_id, name, content, due_date, priority, status }) => {
+    if (!folder_id && !space_id) {
+      throw new Error("Provide either folder_id or space_id");
+    }
+    const path = folder_id
+      ? `/folder/${folder_id}/list`
+      : `/space/${space_id}/list`;
+    const body: Record<string, unknown> = { name };
+    if (content) body.content = content;
+    if (due_date) body.due_date = due_date;
+    if (priority) body.priority = priority;
+    if (status) body.status = status;
+    const data = await post(path, body);
     return jsonResult(slimList(data));
   });
 

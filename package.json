@@ -1,6 +1,6 @@
 {
   "name": "@cavort-it-systems/clickup-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "mcpName": "io.github.cvrt-jh/clickup-mcp",
   "description": "Lightweight ClickUp MCP server for task management - token-optimized responses",
   "type": "module",

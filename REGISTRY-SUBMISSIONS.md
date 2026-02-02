@@ -1,35 +1,43 @@
 # Registry Submissions
 
-Guide for submitting clickup-mcp to MCP registries.
+Status of clickup-mcp registry submissions.
+
+---
+
+## Submission Status
+
+| Registry | Status | Link |
+|----------|--------|------|
+| npm | **Published** | [@cavort-it-systems/clickup-mcp](https://www.npmjs.com/package/@cavort-it-systems/clickup-mcp) |
+| GitHub Releases | **Published** | [v1.0.1](https://github.com/cvrt-jh/clickup-mcp/releases/tag/v1.0.1) |
+| Official MCP Registry | **Published** | io.github.cvrt-jh/clickup-mcp |
+| mcpservers.org | Submitted | Pending review |
+| MCP.so | Not submitted | Optional |
 
 ---
 
 ## 1. Official MCP Registry (registry.modelcontextprotocol.io)
 
-### Method: Publisher CLI
+**Status: PUBLISHED**
+
+Published as `io.github.cvrt-jh/clickup-mcp` using mcp-publisher CLI.
+
+### To Update
 
 ```bash
-# Clone registry tools
-git clone https://github.com/modelcontextprotocol/registry.git
-cd registry
+cd /Users/jh/Git/cvrt-jh/clickup-mcp
 
-# Build publisher
-make publisher
+# Bump version in package.json and server.json
+# Publish to npm first
+npm publish --access public
 
-# Authenticate with GitHub
-./bin/mcp-publisher login --github
-
-# Publish (namespace based on GitHub user)
-./bin/mcp-publisher publish \
-  --name "io.github.cvrt-jh/clickup-mcp" \
-  --description "Lightweight ClickUp MCP server - 35 tools with token-optimized responses (95%+ reduction)" \
-  --repository "https://github.com/cvrt-jh/clickup-mcp" \
-  --npm "@cavort-it-systems/clickup-mcp"
+# Then update MCP registry
+mcp-publisher publish
 ```
 
-### Alternative: GitHub Actions
+### GitHub Actions (Optional)
 
-Add `.github/workflows/publish-mcp.yml`:
+Add `.github/workflows/publish-mcp.yml` for automatic publishing on release:
 
 ```yaml
 name: Publish to MCP Registry
@@ -52,9 +60,11 @@ jobs:
 
 ## 2. awesome-mcp-servers (mcpservers.org)
 
-### Submit at: https://mcpservers.org/submit
+**Status: SUBMITTED** (Feb 2026)
 
-**Form values:**
+Submitted at: https://mcpservers.org/submit
+
+**Form values used:**
 
 | Field | Value |
 |-------|-------|
@@ -64,15 +74,13 @@ jobs:
 | Category | productivity |
 | Contact Email | jh@cavort.de |
 
-**Notes:**
-- Free submission (no payment required)
-- Premium ($39) gets faster review + badge
-
 ---
 
-## 3. MCP.so
+## 3. MCP.so (Optional)
 
-### Submit at: https://mcp.so (look for submit/add button)
+**Status: NOT SUBMITTED**
+
+Submit at: https://mcp.so
 
 **Details:**
 - Name: clickup-mcp
@@ -82,20 +90,25 @@ jobs:
 
 ---
 
-## Pre-Submission Checklist
+## Completed Checklist
 
-- [x] GitHub topics added
+- [x] GitHub topics added (8 topics)
 - [x] package.json updated for npm
 - [x] README with badges and clear install instructions
-- [ ] Publish to npm: `npm publish --access public`
-- [ ] Create GitHub release v1.0.0
-- [ ] Submit to registries (above)
+- [x] Published to npm v1.0.1
+- [x] GitHub release v1.0.1
+- [x] Official MCP Registry published
+- [x] mcpservers.org submitted
 
 ---
 
-## After Publishing to npm
+## Installation
 
-Update Claude config examples to use simpler command:
+```bash
+npx @cavort-it-systems/clickup-mcp
+```
+
+## Configuration
 
 ```bash
 claude mcp add clickup -e CLICKUP_API_TOKEN=xxx -- npx @cavort-it-systems/clickup-mcp

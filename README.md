@@ -1,35 +1,79 @@
 # clickup-mcp
 
-Lightweight ClickUp MCP server focused on task management. Replaces the official ClickUp MCP with a minimal, fast implementation covering 35 tools.
+[![npm version](https://img.shields.io/npm/v/@cvrt-jh/clickup-mcp.svg)](https://www.npmjs.com/package/@cvrt-jh/clickup-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
 
-All API responses are automatically slimmed to reduce token usage — verbose fields like `features`, `sharing`, `watchers`, and full user objects are stripped down to essentials.
+Lightweight ClickUp MCP server focused on task management. 35 tools with **token-optimized responses** — API responses automatically slimmed from thousands of characters to essentials.
 
-## Setup
+## Why This Server?
+
+ClickUp's API returns extremely verbose JSON. This server strips it down:
+
+| Response | Before | After | Reduction |
+|----------|--------|-------|-----------|
+| `clickup_whoami` | ~3,500 chars | ~160 chars | **95%** |
+| `clickup_create_comment` | ~1,500 chars | ~38 chars | **97%** |
+
+Less tokens = faster responses, lower costs, more context for your AI.
+
+## Installation
 
 ```bash
-npm install
-npm run build
+npm install -g @cvrt-jh/clickup-mcp
+```
+
+Or run directly:
+
+```bash
+npx @cvrt-jh/clickup-mcp
 ```
 
 ## Configuration
 
-Add via Claude Code CLI:
+### Claude Code CLI
 
 ```bash
-claude mcp add -s user clickup -- bash -c 'source ~/path/to/.env && exec env CLICKUP_API_TOKEN="$CLICKUP_API_TOKEN" node /path/to/clickup-mcp/build/index.js'
+claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- npx @cvrt-jh/clickup-mcp
 ```
 
-Or add manually to `~/.claude.json` under `mcpServers`:
+### Claude Desktop / Manual
+
+Add to your MCP config (`~/.claude.json` or Claude Desktop settings):
 
 ```json
-"clickup": {
-  "type": "stdio",
-  "command": "bash",
-  "args": ["-c", "source ~/path/to/.env && exec env CLICKUP_API_TOKEN=\"$CLICKUP_API_TOKEN\" node /path/to/clickup-mcp/build/index.js"]
+{
+  "mcpServers": {
+    "clickup": {
+      "command": "npx",
+      "args": ["@cvrt-jh/clickup-mcp"],
+      "env": {
+        "CLICKUP_API_TOKEN": "your-token"
+      }
+    }
+  }
 }
 ```
 
-Requires a ClickUp Personal API Token (`CLICKUP_API_TOKEN`). Generate one at ClickUp Settings > Apps.
+### From Source
+
+```bash
+git clone https://github.com/cvrt-jh/clickup-mcp.git
+cd clickup-mcp
+npm install && npm run build
+```
+
+Then configure with the built path:
+
+```bash
+claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- node /path/to/clickup-mcp/build/index.js
+```
+
+## Get Your API Token
+
+1. Go to ClickUp Settings > Apps
+2. Generate a Personal API Token
+3. Set as `CLICKUP_API_TOKEN`
 
 ## Response Slimming
 

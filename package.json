@@ -1,15 +1,44 @@
 {
-  "name": "clickup-mcp",
+  "name": "@cvrt-jh/clickup-mcp",
   "version": "1.0.0",
-  "description": "Lightweight ClickUp MCP server for task management",
+  "description": "Lightweight ClickUp MCP server for task management - token-optimized responses",
   "type": "module",
   "main": "build/index.js",
+  "bin": {
+    "clickup-mcp": "build/index.js"
+  },
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": ["clickup", "mcp", "model-context-protocol"],
+  "keywords": [
+    "clickup",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "ai-tools",
+    "llm",
+    "token-optimization"
+  ],
+  "author": "CVRT",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvrt-jh/clickup-mcp.git"
+  },
+  "homepage": "https://github.com/cvrt-jh/clickup-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/cvrt-jh/clickup-mcp/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "zod": "^3.24.4"

@@ -172,4 +172,49 @@ export function register(server: McpServer) {
     await del(`/task/${task_id}`);
     return jsonResult({ deleted: true, task_id });
   });
+
+  // NOTE: the ClickUp v2 API has NO endpoint that MOVES a task between lists.
+  // Verified against the live API 2026-08-12:
+  //   POST /list/{list}/task/{task}  -> 200, ADDS a secondary location; home list unchanged
+  //   PUT  /task/{task} {list_id}    -> 200 and SILENTLY IGNORED (no move, no error)
+  //   PUT  /task/{task} {list:{id}}  -> 200 and SILENTLY IGNORED (no move, no error)
+  //   POST /task/{task}/list/{list}  -> 404, not a route
+  // Do NOT add a list_id field to clickup_update_task: it would report success and
+  // do nothing. A real move requires the web UI (right-click -> Move), which keeps
+  // the custom ID and history, or delete-and-recreate, which loses both.
+  // The two tools below are multi-homing only, and are named to say so.
+
+  server.registerTool("clickup_add_task_to_list", {
+    description:
+      "Add a task to an ADDITIONAL list (multi-homing). This does NOT move the task: " +
+      "its home list is unchanged and it may not appear in the target list's task query. " +
+      "Requires the paid Tasks-in-Multiple-Lists feature. There is no API to move a task " +
+      "between lists - use the ClickUp web UI (right-click -> Move) to preserve the custom ID and history.",
+    inputSchema: {
+      task_id: taskId,
+      list_id: listId,
+    },
+  }, async ({ task_id, list_id }) => {
+    await post(`/list/${list_id}/task/${task_id}`);
+    return jsonResult({
+      added: true,
+      task_id,
+      list_id,
+      warning: "Task ADDED as a secondary location, not moved. Home list unchanged.",
+    });
+  });
+
+  server.registerTool("clickup_remove_task_from_list", {
+    description:
+      "Remove a task from an ADDITIONAL list it was multi-homed into. Cannot remove a task " +
+      "from its home list (use clickup_delete_task for that). Requires the paid " +
+      "Tasks-in-Multiple-Lists feature.",
+    inputSchema: {
+      task_id: taskId,
+      list_id: listId,
+    },
+  }, async ({ task_id, list_id }) => {
+    await del(`/list/${list_id}/task/${task_id}`);
+    return jsonResult({ removed: true, task_id, list_id });
+  });
 }

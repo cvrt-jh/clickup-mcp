@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
 
-Lightweight ClickUp MCP server focused on task management. 37 tools with **token-optimized responses** — API responses automatically slimmed from thousands of characters to essentials.
+Lightweight ClickUp MCP server focused on task management. 39 tools with **token-optimized responses** - API responses automatically slimmed from thousands of characters to essentials.
 
 ## Why This Server?
 
@@ -77,9 +77,9 @@ claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- node /path/to/clickup-
 
 ## Response Slimming
 
-All responses are automatically trimmed to save tokens. The ClickUp API returns extremely verbose JSON — this server strips it down to what matters.
+All responses are automatically trimmed to save tokens. The ClickUp API returns extremely verbose JSON - this server strips it down to what matters.
 
-**`clickup_whoami`** — from ~3,500 chars to ~160:
+**`clickup_whoami`** - from ~3,500 chars to ~160:
 ```json
 // Before (ClickUp API raw)
 {"user":{"id":12345678,"username":"Jane Doe","email":"jane@example.com","color":"#0388d1",
@@ -99,7 +99,7 @@ All responses are automatically trimmed to save tokens. The ClickUp API returns 
 "name":"My Workspace","member_count":4}]}
 ```
 
-**`clickup_create_comment`** — from ~1,500 chars to 38:
+**`clickup_create_comment`** - from ~1,500 chars to 38:
 ```json
 // Before
 {"id":90150191300876,"hist_id":"...","date":1770053982842,
@@ -178,6 +178,17 @@ All responses are automatically trimmed to save tokens. The ClickUp API returns 
 ### Delete Task (1)
 - `clickup_delete_task` - Delete a task
 
+### Multi-List Membership (2)
+- `clickup_add_task_to_list` - Add a task to an **additional** list (multi-homing)
+- `clickup_remove_task_from_list` - Remove a task from an additional list
+
+> **These do not move a task.** The ClickUp v2 API has no move-between-lists
+> endpoint. Verified against the live API 2026-08-12: `POST /list/{list}/task/{task}`
+> adds a secondary location and leaves the home list unchanged, while a `list_id`
+> in `PUT /task/{id}` returns HTTP 200 and is silently ignored. To genuinely move a
+> task and keep its custom ID and history, use the ClickUp web UI (right-click ->
+> Move). Multi-list membership also requires the paid Tasks-in-Multiple-Lists feature.
+
 ### Workspace Members (2)
 - `clickup_get_workspace_members` - All workspace members
 - `clickup_get_list_members` - List-specific members
@@ -192,7 +203,7 @@ src/
   slim.ts           # Response slimming transformers
   tools/
     navigation.ts   # 7 tools
-    tasks.ts        # 7 tools (CRUD + custom fields + delete)
+    tasks.ts        # 9 tools (CRUD + custom fields + delete + multi-list)
     tags.ts         # 6 tools
     checklists.ts   # 6 tools
     dependencies.ts # 4 tools

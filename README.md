@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
 
-Lightweight ClickUp MCP server focused on task management. 39 tools with **token-optimized responses** - API responses automatically slimmed from thousands of characters to essentials.
+Lightweight ClickUp MCP server focused on task management. 40 tools with **token-optimized responses** - API responses automatically slimmed from thousands of characters to essentials.
 
 ## Why This Server?
 
@@ -60,7 +60,7 @@ Add to your MCP config (`~/.claude.json` or Claude Desktop settings):
 ```bash
 git clone https://github.com/cvrt-jh/clickup-mcp.git
 cd clickup-mcp
-npm install && npm run build
+pnpm install && pnpm build
 ```
 
 Then configure with the built path:
@@ -68,6 +68,14 @@ Then configure with the built path:
 ```bash
 claude mcp add clickup -e CLICKUP_API_TOKEN=your-token -- node /path/to/clickup-mcp/build/index.js
 ```
+
+### Custom task IDs
+
+Every tool that takes a `task_id` accepts the custom ID as well (`DEV-1217`), not only
+the internal one (`86caqr85m`). The server adds `custom_task_ids=true&team_id=...` itself.
+The workspace id comes from `CLICKUP_TEAM_ID`, or, if unset, from the token's only
+workspace (looked up once). A token with access to several workspaces must set
+`CLICKUP_TEAM_ID`.
 
 ## Get Your API Token
 
@@ -125,7 +133,7 @@ All responses are automatically trimmed to save tokens. The ClickUp API returns 
 | Pretty-print JSON | all responses | Compact single-line output |
 | Empty arrays | tasks | `checklists`, `dependencies`, `custom_fields` omitted when empty |
 
-## Tools (37)
+## Tools (40)
 
 ### Navigation (7)
 - `clickup_whoami` - Current user + workspaces
@@ -189,6 +197,9 @@ All responses are automatically trimmed to save tokens. The ClickUp API returns 
 > task and keep its custom ID and history, use the ClickUp web UI (right-click ->
 > Move). Multi-list membership also requires the paid Tasks-in-Multiple-Lists feature.
 
+### Attachments (1)
+- `clickup_upload_attachment` - Upload a local file (screenshot, PDF) to a task
+
 ### Workspace Members (2)
 - `clickup_get_workspace_members` - All workspace members
 - `clickup_get_list_members` - List-specific members
@@ -209,6 +220,7 @@ src/
     dependencies.ts # 4 tools
     comments.ts     # 5 tools
     members.ts      # 2 tools
+    attachments.ts  # 1 tool (multipart upload)
 ```
 
 ## License

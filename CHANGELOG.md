@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-10-08
+
+### Added
+- `clickup_upload_attachment`: upload a local file to a task (multipart).
+- Custom task IDs (`DEV-1217`) work in every tool that addresses a task. Before,
+  the API answered `401 Team not authorized (OAUTH_027)`. Workspace id from
+  `CLICKUP_TEAM_ID`, else the token's only workspace.
+- Vitest suite (`pnpm test`), CI workflow, `.env.example`.
+
+### Changed
+- pnpm instead of npm. The server reports the package.json version (was a
+  hardcoded `1.0.0`).
+
 ## [1.0.4] - 2026-08-12
 
 ### Added

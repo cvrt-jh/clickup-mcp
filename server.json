@@ -6,12 +6,12 @@
     "url": "https://github.com/cvrt-jh/clickup-mcp",
     "source": "github"
   },
-  "version": "1.0.3",
+  "version": "1.1.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@cavort-it-systems/clickup-mcp",
-      "version": "1.0.3",
+      "version": "1.1.0",
       "transport": {
         "type": "stdio"
       },

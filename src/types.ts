@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Reusable Zod schemas for tool inputs
 
-export const taskId = z.string().describe("ClickUp task ID");
+export const taskId = z.string().describe("ClickUp task ID: internal (e.g. 86caqr85m) or custom (e.g. DEV-1217)");
 export const listId = z.string().describe("ClickUp list ID");
 export const spaceId = z.string().describe("ClickUp space ID");
 export const folderId = z.string().describe("ClickUp folder ID");

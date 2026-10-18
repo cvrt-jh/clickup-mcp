@@ -1,5 +1,7 @@
 # clickup-mcp
 
+> **Unmaintained.** ClickUp is retired at CAVORT (2026-10-18, cutover to Console complete). This server is kept as is and no longer developed.
+
 [![npm version](https://img.shields.io/npm/v/@cavort-it-systems/clickup-mcp.svg)](https://www.npmjs.com/package/@cavort-it-systems/clickup-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.12.1-blue.svg)](https://modelcontextprotocol.io)
